@@ -1,0 +1,31 @@
+<h3>➕ Facebook: Buat Live</h3>
+<form id="fbNewForm" class="mt-3">
+  <div class="mb-3"><label>Input Video / URL</label><input name="input" class="form-control" required></div>
+  <div class="mb-3"><label>Stream Key</label><input name="streamKey" class="form-control" required></div>
+  <div class="mb-3">
+    <label>Mode</label>
+    <select name="mode" class="form-select" id="modeSelect">
+      <option value="now">Live Sekarang</option>
+      <option value="schedule">Jadwalkan</option>
+    </select>
+  </div>
+  <div class="mb-3" id="scheduleField" style="display:none;">
+    <label>Waktu Mulai</label><input type="datetime-local" name="startAt" class="form-control">
+  </div>
+  <button class="btn btn-primary">🚀 Buat</button>
+</form>
+<script>
+$("#modeSelect").on("change", function(){ $("#scheduleField").toggle(this.value==="schedule"); });
+$("#fbNewForm").on("submit", async function(e){
+  e.preventDefault();
+  const body = {
+    platform: "facebook",
+    input: this.input.value,
+    output: "rtmps://live-api-s.facebook.com:443/rtmp/" + this.streamKey.value,
+    liveNow: this.mode.value === "now"
+  };
+  if(this.mode.value === "schedule") body.startAt = this.startAt.value;
+  const res = await apiPOST("/api/facebook/create", body);
+  Swal.fire(res.ok?"Sukses":"Gagal", res.ok?"Job dibuat":"Error", res.ok?"success":"error");
+});
+</script>
