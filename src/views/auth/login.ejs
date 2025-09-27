@@ -19,7 +19,8 @@
       <i class="fa-solid fa-right-to-bracket fa-2x text-primary"></i>
       <h3 class="mt-2">Login</h3>
     </div>
-    <form id="loginForm" method="POST" autocomplete="off">
+    <!-- ✅ action diarahkan ke API -->
+    <form id="loginForm" method="POST" action="/api/auth/login" autocomplete="off">
       <div class="mb-3">
         <label class="form-label"><i class="fa fa-user me-2"></i> Username</label>
         <input type="text" class="form-control" name="username" required autocomplete="off">
@@ -41,7 +42,7 @@
 <script src="/public/main.js"></script>
 <script>
 $(function(){
-  // ambil setting admin
+  // Ambil setting admin
   $.get("/api/admin/settings", (res)=>{
     if(res.settings.enable_captcha && res.settings.captcha_keys?.recaptcha?.site){
       const site = res.settings.captcha_keys.recaptcha.site;
@@ -49,8 +50,9 @@ $(function(){
     }
   });
 
+  // AJAX handler
   $("#loginForm").on("submit", async function(e){
-    e.preventDefault();
+    e.preventDefault(); // cegah submit default
     const body = {
       username: this.username.value,
       password: this.password.value,
