@@ -1,0 +1,23 @@
+<h3>📊 Statistik</h3>
+<div class="row mt-3 g-3">
+  <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6>Total</h6><h2 id="sTotal">0</h2></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6>Running</h6><h2 id="sRunning">0</h2></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6>Scheduled</h6><h2 id="sScheduled">0</h2></div></div></div>
+  <div class="col-md-3"><div class="card"><div class="card-body text-center"><h6>Stopped</h6><h2 id="sStopped">0</h2></div></div></div>
+</div>
+<hr class="my-4">
+<h5>📈 Live per Bulan</h5>
+<canvas id="monthlyChart" height="120"></canvas>
+<script>
+$(async function(){
+  const res = await apiGET("/api/stats/user");
+  if(!res.ok) return;
+  $("#sTotal").text(res.total); $("#sRunning").text(res.running);
+  $("#sScheduled").text(res.scheduled); $("#sStopped").text(res.stopped);
+  new Chart(document.getElementById("monthlyChart"), {
+    type:"bar",
+    data:{ labels:Object.keys(res.monthly), datasets:[{ label:"Jumlah Live", data:Object.values(res.monthly) }] },
+    options:{ responsive:true, plugins:{ legend:{ display:false } }, scales:{ y:{ beginAtZero:true } } }
+  });
+});
+</script>
