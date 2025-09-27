@@ -1,0 +1,29 @@
+<h3>📜 Riwayat Live YouTube</h3>
+<table class="table table-bordered table-hover align-middle mt-3">
+  <thead class="table-light"><tr><th>ID</th><th>Input</th><th>Status</th><th>Waktu</th><th>Aksi</th></tr></thead>
+  <tbody id="ytBody"><tr><td colspan="5" class="text-center text-muted">Memuat...</td></tr></tbody>
+</table>
+<script>
+(async function(){
+  const res = await apiGET("/api/youtube");
+  const el = $("#ytBody").empty();
+  if(!res.ok || res.jobs.length===0){ el.html('<tr><td colspan="5" class="text-center text-muted">Kosong</td></tr>'); return; }
+  res.jobs.filter(j=>j.platform==="youtube").forEach(j=>{
+    const badge = j.status==="running"?"success":j.status==="scheduled"?"warning":j.status==="stopped"?"secondary":"danger";
+    el.append(`<tr>
+      <td>${j.id}</td>
+      <td>${j.input}</td>
+      <td><span class="badge bg-${badge}">${j.status}</span></td>
+      <td>${j.startedAt||""} ${j.stoppedAt?("<br/>"+j.stoppedAt):""}</td>
+      <td>
+        ${j.status==="running" ? `<button class="btn btn-danger btn-sm" onclick="stopJob('${j.id}')">Stop</button>` :
+          j.status==="scheduled" ? `<button class="btn btn-secondary btn-sm" onclick="cancelJob('${j.id}')">Cancel</button>` :
+          `<button class="btn btn-success btn-sm" onclick="startJob('${j.id}')">Start</button>`}
+      </td>
+    </tr>`);
+  });
+})();
+async function startJob(id){ const r=await apiPOST(`/api/youtube/${id}/start`,{}); Swal.fire(r.ok?"Dimulai":"Gagal", r.message||"", r.ok?"success":"error").then(()=>location.reload());}
+async function stopJob(id){ const r=await apiPOST(`/api/youtube/${id}/stop`,{}); Swal.fire(r.ok?"Dihentikan":"Gagal", r.message||"", r.ok?"success":"error").then(()=>location.reload());}
+async function cancelJob(id){ const r=await apiDELETE(`/api/youtube/${id}`); Swal.fire(r.ok?"Dibatalkan":"Gagal", r.message||"", r.ok?"success":"error").then(()=>location.reload());}
+</script>
