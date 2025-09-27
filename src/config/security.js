@@ -10,27 +10,28 @@ export const applySecurity = (app) => {
       directives: {
         defaultSrc: ["'self'"],
 
-        // ✅ script (jQuery, SweetAlert2, Chart.js, reCAPTCHA)
+        // ✅ Script: jQuery, Bootstrap, SweetAlert2, Chart.js, reCAPTCHA
         scriptSrc: [
           "'self'",
           "'unsafe-inline'",
+          "'unsafe-eval'",         // biar lib seperti Chart.js ga error
           "https://cdn.jsdelivr.net",
-          "https://code.jquery.com",
           "https://cdnjs.cloudflare.com",
+          "https://code.jquery.com",
           "https://www.gstatic.com",
           "https://www.google.com"
         ],
 
-        // ✅ style (Bootstrap, Google Fonts)
+        // ✅ Style: Bootstrap, Google Fonts
         styleSrc: [
           "'self'",
           "'unsafe-inline'",
+          "https://fonts.googleapis.com",
           "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com",
-          "https://fonts.googleapis.com"
+          "https://cdnjs.cloudflare.com"
         ],
 
-        // ✅ fonts
+        // ✅ Fonts
         fontSrc: [
           "'self'",
           "https://fonts.gstatic.com",
@@ -38,7 +39,7 @@ export const applySecurity = (app) => {
           "https://cdnjs.cloudflare.com"
         ],
 
-        // ✅ images
+        // ✅ Images
         imgSrc: [
           "'self'",
           "data:",
@@ -46,17 +47,19 @@ export const applySecurity = (app) => {
           "https://www.google.com"
         ],
 
-        // ✅ iframe (reCAPTCHA)
+        // ✅ Iframe (reCAPTCHA)
         frameSrc: [
           "'self'",
           "https://www.google.com"
         ],
 
-        // ✅ AJAX / Websocket
+        // ✅ AJAX / fetch
         connectSrc: [
           "'self'",
           "https://www.google.com",
-          "https://www.gstatic.com"
+          "https://www.gstatic.com",
+          "https://cdn.jsdelivr.net",
+          "https://cdnjs.cloudflare.com"
         ]
       }
     }
@@ -79,7 +82,7 @@ export const applySecurity = (app) => {
     max: 200
   }));
 
-  // Rate limit login
+  // Rate limit login khusus
   app.use("/api/auth/login", rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10
