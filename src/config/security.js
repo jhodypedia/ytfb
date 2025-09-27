@@ -8,59 +8,13 @@ export const applySecurity = (app) => {
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        defaultSrc: ["'self'"],
-
-        // ✅ Script: jQuery, Bootstrap, SweetAlert2, Chart.js, reCAPTCHA
-        scriptSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "'unsafe-eval'",         // biar lib seperti Chart.js ga error
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com",
-          "https://code.jquery.com",
-          "https://www.gstatic.com",
-          "https://www.google.com"
-        ],
-
-        // ✅ Style: Bootstrap, Google Fonts
-        styleSrc: [
-          "'self'",
-          "'unsafe-inline'",
-          "https://fonts.googleapis.com",
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com"
-        ],
-
-        // ✅ Fonts
-        fontSrc: [
-          "'self'",
-          "https://fonts.gstatic.com",
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com"
-        ],
-
-        // ✅ Images
-        imgSrc: [
-          "'self'",
-          "data:",
-          "https://www.gstatic.com",
-          "https://www.google.com"
-        ],
-
-        // ✅ Iframe (reCAPTCHA)
-        frameSrc: [
-          "'self'",
-          "https://www.google.com"
-        ],
-
-        // ✅ AJAX / fetch
-        connectSrc: [
-          "'self'",
-          "https://www.google.com",
-          "https://www.gstatic.com",
-          "https://cdn.jsdelivr.net",
-          "https://cdnjs.cloudflare.com"
-        ]
+        defaultSrc: ["'self'", "https:"],   // ✅ izinkan semua domain https
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'", "https:"],
+        styleSrc: ["'self'", "'unsafe-inline'", "https:"],
+        fontSrc: ["'self'", "https:", "data:"],
+        imgSrc: ["'self'", "https:", "data:"],
+        connectSrc: ["'self'", "https:"],
+        frameSrc: ["'self'", "https:"]
       }
     }
   }));
@@ -82,7 +36,7 @@ export const applySecurity = (app) => {
     max: 200
   }));
 
-  // Rate limit login khusus
+  // Rate limit login
   app.use("/api/auth/login", rateLimit({
     windowMs: 5 * 60 * 1000,
     max: 10
