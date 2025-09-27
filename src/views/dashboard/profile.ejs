@@ -1,0 +1,30 @@
+<h3>⚙️ Profil</h3>
+<div class="row">
+  <div class="col-md-6">
+    <form id="fUser" class="mb-4">
+      <label class="form-label">Username</label>
+      <input name="username" class="form-control" placeholder="username baru">
+      <button class="btn btn-primary mt-3">Update Username</button>
+    </form>
+
+    <form id="fPass">
+      <label class="form-label">Password Lama</label>
+      <input name="oldPassword" type="password" class="form-control" required>
+      <label class="form-label mt-2">Password Baru</label>
+      <input name="newPassword" type="password" class="form-control" required>
+      <button class="btn btn-warning mt-3">Update Password</button>
+    </form>
+  </div>
+</div>
+<script>
+$("#fUser").on("submit", async function(e){
+  e.preventDefault();
+  const r=await apiPOST("/api/user/update-username",{ username:this.username.value });
+  Swal.fire(r.ok?"Sukses":"Gagal", r.message||"", r.ok?"success":"error");
+});
+$("#fPass").on("submit", async function(e){
+  e.preventDefault();
+  const r=await apiPOST("/api/user/update-password",{ oldPassword:this.oldPassword.value, newPassword:this.newPassword.value });
+  Swal.fire(r.ok?"Sukses":"Gagal", r.message||"", r.ok?"success":"error");
+});
+</script>
