@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+body.auth-body{background:linear-gradient(135deg,#0d6efd,#6610f2);min-height:100vh;font-family:'Poppins',sans-serif}
+.auth-card{background:#fff;max-width:380px;width:100%;border-radius:16px;animation:float 4s ease-in-out infinite}
+.auth-card input{border-radius:10px;padding:10px 14px;transition:.3s}
+.auth-card input:focus{border-color:#0d6efd;box-shadow:0 0 12px rgba(13,110,253,.3)}
+button{border-radius:12px;font-weight:600;transition:.25s}
+button:hover{transform:translateY(-2px);box-shadow:0 6px 16px rgba(0,0,0,.2)}
+@keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-6px)}100%{transform:translateY(0)}}
