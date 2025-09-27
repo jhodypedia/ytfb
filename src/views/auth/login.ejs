@@ -50,12 +50,16 @@
 
   <script>
   $(function(){
-    // ✅ Ambil setting public (bukan yang /api/admin/settings)
+    // ✅ Ambil setting public (tanpa auth)
     $.get("/api/admin/settings/public", (res)=>{
-      if(res.settings.enable_captcha && res.settings.captcha_keys?.recaptcha?.site){
+      if(res.ok && res.settings.enable_captcha && res.settings.captcha_keys?.recaptcha?.site){
         const site = res.settings.captcha_keys.recaptcha.site;
         $("#captchaContainer").html(`<div class="g-recaptcha" data-sitekey="${site}"></div>`);
+      } else {
+        console.warn("Captcha tidak aktif / tidak ada sitekey");
       }
+    }).fail(()=>{
+      console.error("Gagal load settings");
     });
 
     // ✅ AJAX login
